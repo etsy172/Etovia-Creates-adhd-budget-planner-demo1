@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Demo | ADHD Budget Planner</title>
+<meta name="description" content="Try a free demo of the ADHD Budget Planner, a paycheck and monthly budget tracker for Excel.">
+<style>
+:root{--bg:#F7F6F2;--card:#fff;--pri:#6555A5;--soft:#EEEAF8;--pink:#D99DAD;--green:#548A73;--gsoft:#E9F3ED;--red:#C96D72;--rsoft:#FAEAEA;--text:#29283A;--muted:#858397;--line:#E4DFF0}
+@media(prefers-color-scheme:dark){:root{--bg:#171622;--card:#222130;--pri:#A899DF;--soft:#353049;--green:#7EB99A;--gsoft:#293D35;--red:#E38D92;--rsoft:#452F36;--text:#F1EFF8;--muted:#AAA6BB;--line:#373447}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{padding:44px 0 20px}
+.kicker{font-size:12px;letter-spacing:3px;font-weight:700;color:var(--pink);text-transform:uppercase}
+h1,h2{font-family:Georgia,'Times New Roman',serif;color:var(--pri);line-height:1.15}
+h1{font-size:clamp(30px,5vw,46px);margin:8px 0 10px}
+h2{font-size:24px;margin-bottom:6px}
+.lead{color:var(--muted);max-width:640px}
+.cta{display:inline-block;background:var(--pri);color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px;margin-top:16px}
+.cta[hidden]{display:none}
+.banner{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14px;margin:18px 0}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 14px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.tab[aria-selected=true]{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab:focus-visible,.cta:focus-visible,input:focus-visible{outline:3px solid rgba(101,85,165,.35);outline-offset:2px}
+.viewer{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 10px 40px rgba(60,45,110,.12)}
+.viewer img{display:block;width:100%;height:auto;border-radius:8px;background:#fff}
+.caption{margin:12px 4px 2px;font-size:15px}
+.locked{font-size:13px;color:var(--muted);margin-top:8px}
+section{margin:46px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.field{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:10px 0;font-size:14px}
+.field input{width:130px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#FFF9E5;color:#0000FF;font:inherit;text-align:right}
+.result{margin-top:16px;padding:16px;border-radius:12px;text-align:center}
+.result b{display:block;font-family:Georgia,serif;font-size:32px}
+.result.ok{background:var(--gsoft);color:var(--green)}.result.bad{background:var(--rsoft);color:var(--red)}
+.note{font-size:13px;color:var(--muted);margin-top:10px}
+ul.pts{list-style:none;margin-top:10px}ul.pts li{padding-left:28px;position:relative;margin:8px 0}
+ul.pts li:before{content:"✓";position:absolute;left:0;color:#fff;background:var(--pri);width:20px;height:20px;border-radius:50%;font-size:12px;text-align:center;line-height:20px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kicker">Free demo</div>
+  <h1>ADHD Budget Planner</h1>
+  <p class="lead">A paycheck and monthly budget tracker for Excel. Click through the tabs below and try the two calculators to see how it works. Nothing you type here is saved or sent anywhere.</p>
+  <a class="cta" id="cta1" href="#" target="_blank" rel="noopener" hidden>Get the full planner on Etsy</a>
+</header>
+
+<div class="banner"><b>This is a preview.</b> The full planner is an Excel spreadsheet (15 tabs, blank and sample versions, plus a PDF guide). Screenshots below are from the sample file.</div>
+
+<section aria-labelledby="tour" style="margin-top:10px">
+  <h2 id="tour">Take a tour</h2>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="viewer">
+    <img id="shot" alt="">
+    <p class="caption" id="cap"></p>
+  </div>
+  <p class="locked">In the real file, every number here updates automatically as you type in the yellow cells.</p>
+</section>
+
+<section aria-labelledby="try">
+  <h2 id="try">Try it yourself</h2>
+  <p class="lead" style="margin-bottom:16px">The same ideas the planner uses, in two mini calculators.</p>
+  <div class="grid">
+    <div class="card">
+      <h3 style="font-family:Georgia,serif;color:var(--pri);margin-bottom:4px">Safe to spend</h3>
+      <p class="note" style="margin-top:0">Income &minus; spending &minus; unpaid bills &minus; planned savings</p>
+      <label class="field">Income this month <input id="c_inc" type="number" min="0" step="0.01" value="3820"></label>
+      <label class="field">Spent so far <input id="c_spent" type="number" min="0" step="0.01" value="1323.05"></label>
+      <label class="field">Unpaid bills <input id="c_bills" type="number" min="0" step="0.01" value="300"></label>
+      <label class="field">Planned savings <input id="c_sav" type="number" min="0" step="0.01" value="200"></label>
+      <div class="result ok" id="r1" aria-live="polite"><span>SAFE TO SPEND</span><b id="r1v">$0.00</b></div>
+    </div>
+    <div class="card">
+      <h3 style="font-family:Georgia,serif;color:var(--pri);margin-bottom:4px">Plan a paycheck</h3>
+      <p class="note" style="margin-top:0">Bills first, then savings, then you</p>
+      <label class="field">Net pay <input id="p_pay" type="number" min="0" step="0.01" value="1850"></label>
+      <label class="field">Bills this paycheck covers <input id="p_bills" type="number" min="0" step="0.01" value="1285"></label>
+      <label class="field">Savings % <input id="p_sp" type="number" min="0" max="100" step="1" value="10"></label>
+      <label class="field">Extra debt % <input id="p_dp" type="number" min="0" max="100" step="1" value="5"></label>
+      <div class="result ok" id="r2" aria-live="polite"><span>LEFT TO SPEND</span><b id="r2v">$0.00</b></div>
+      <p class="note" id="r2n"></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What is in the full planner</h2>
+  <ul class="pts">
+    <li>Dashboard with safe-to-spend and a five-point health check</li>
+    <li>Paycheck planner, monthly budget with colour alerts, bills calendar</li>
+    <li>Expense and income trackers with dropdown categories</li>
+    <li>Subscriptions, weekly spending, savings goals and challenges</li>
+    <li>Debt payoff with snowball and avalanche order</li>
+    <li>Annual overview, blank and sample files, and a PDF quick-start guide</li>
+  </ul>
+  <a class="cta" id="cta2" href="#" target="_blank" rel="noopener" hidden>Get the full planner on Etsy</a>
+</section>
+
+<footer>
+  A budgeting organisation tool. Not financial, tax, investment, legal or medical advice. Example figures are illustrations only.
+</footer>
+</div>
+
+<script>
+// ===== EDIT THIS: paste your Etsy listing URL between the quotes =====
+const ETSY_URL = "PASTE_YOUR_LISTING_URL_HERE";
+// =====================================================================
+
+const TABS = [
+  ["Dashboard","dashboard","Your safe-to-spend number, summary cards, health check and charts in one place."],
+  ["Paycheck Planner","paycheck","Split each paycheck into bills, savings, extra debt and money left to spend."],
+  ["Monthly Budget","budget","Planned vs actual for every category, with On track, Close and Over alerts."],
+  ["Bills","bills","Due dates, days left and Paid, Due soon or Overdue status."],
+  ["Weekly Spending","weekly","See which week spending crept up, with a category-by-week grid."],
+  ["Subscriptions","subscriptions","Monthly and yearly cost of everything that renews."],
+  ["Savings","savings","Goal progress and the monthly amount needed to get there."],
+  ["Debt Payoff","debt","Snowball and avalanche order, months to pay off and estimated interest."],
+  ["Annual","annual","Income, spending, net and savings rate for all twelve months."]
+];
+const tabsEl = document.getElementById("tabs"), shot = document.getElementById("shot"), cap = document.getElementById("cap");
+function show(i){
+  const [name,file,text] = TABS[i];
+  shot.src = file+".png"; shot.alt = name+" tab of the ADHD Budget Planner";
+  cap.innerHTML = "<b>"+name+".</b> "+text;
+  [...tabsEl.children].forEach((b,j)=>b.setAttribute("aria-selected", j===i));
+}
+TABS.forEach((t,i)=>{
+  const b = document.createElement("button");
+  b.className="tab"; b.type="button"; b.role="tab"; b.textContent=t[0];
+  b.addEventListener("click",()=>show(i)); tabsEl.appendChild(b);
+});
+show(0);
+
+const fmt = n => (n<0?"-":"")+"$"+Math.abs(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const num = id => Math.max(0, parseFloat(document.getElementById(id).value)||0);
+function calc1(){
+  const v = num("c_inc")-num("c_spent")-num("c_bills")-num("c_sav");
+  document.getElementById("r1v").textContent = fmt(v);
+  document.getElementById("r1").className = "result "+(v>=0?"ok":"bad");
+}
+function calc2(){
+  const pay=num("p_pay"), sp=Math.min(num("p_sp"),100), dp=Math.min(num("p_dp"),100);
+  const v = pay-num("p_bills")-pay*sp/100-pay*dp/100;
+  document.getElementById("r2v").textContent = fmt(v);
+  document.getElementById("r2").className = "result "+(v>=0?"ok":"bad");
+  document.getElementById("r2n").textContent = v<0 ? "Over-allocated. In the planner, you would move a bill to another paycheck." : "Planned. This paycheck covers its bills, savings and debt.";
+}
+["c_inc","c_spent","c_bills","c_sav"].forEach(id=>document.getElementById(id).addEventListener("input",calc1));
+["p_pay","p_bills","p_sp","p_dp"].forEach(id=>document.getElementById(id).addEventListener("input",calc2));
+calc1(); calc2();
+
+if (/^https?:\/\//.test(ETSY_URL)) {
+  ["cta1","cta2"].forEach(id=>{const a=document.getElementById(id); a.href=ETSY_URL; a.hidden=false;});
+}
+</script>
+</body>
+</html>
